@@ -3,16 +3,16 @@
 #include <string.h>
 #include <getopt.h>
 
+#include "bfs.h"
+#include "djikstra.h"
+#include "generator.h"
+
 char *instrukcja = "Instrukcja programu %s służącego do rysowania grafów: \n" // do aktualizacji
 "Możliwe argumenty wywołania programu to:\n"
 " -x <liczba całkowita> - wymiar pionowy grafu\n"
 " -y <liczba całkowita> - wymiar poziomy grafu\n"
 "[-n <liczba całkowita> - podział grafu na ilość podgrafów\n";
 
-void create_graph(int x, int y, char *plik, double range_begin, double range_end)
-{
-    printf("Tworzenie grafu o wymiarach %ix%i, z wagami krawędzi w zakresie <%.3lf;%.3lf> i zapis do pliku %s.\n", x, y, range_begin, range_end, plik);
-}
 void check_graph( char *plik)
 {
     printf("Sprawdzanie spójności grafu z pliku %s.\n", plik);
@@ -26,7 +26,8 @@ int main ( int argc, char **argv)
 {
     //zmienne
     int opt; // do getopta
-    char *mode = NULL, *filename = NULL, *dim_tmp = NULL, *point1_tmp = NULL, *point2_tmp = NULL, *range_tmp = NULL;; // do wszytana argumetów getoptem
+    char *mode_tmp = NULL, *filename = NULL, *dim_tmp = NULL;
+    char *point1_tmp = NULL, *point2_tmp = NULL, *range_tmp = NULL;; // do wczytywania argumetów getoptem
     char tmp[14], tmp2[7], tmp3[18], tmp4[9], tmp5[14], tmp6[14], tmp7[14], tmp8[14]; // stringi do przeksztąłcenia wczytywanych argumentów
     char *p = NULL; // jak wyżej
     int x_dim = 100, y_dim = 100;//domyślne wymiary grafu
@@ -42,7 +43,7 @@ int main ( int argc, char **argv)
         switch (opt) 
         {
         case 'm':
-            mode = optarg;
+            mode_tmp = optarg;
             break;
         case 'f':
             filename = optarg;
@@ -72,16 +73,19 @@ int main ( int argc, char **argv)
     }
 
     // obróbka wczytanych argumetów i sprawdzenie ich
-
-    if ( strcmp( mode, "generate") == 0 || strcmp( mode, "") == 0 )
+    if ( mode_tmp == NULL)
     {
         mode = 0;
     }
-    else if( strcmp(mode, "check") == 0)
+    else if ( strcmp( mode_tmp, "generate") == 0)
+    {
+        mode = 0;
+    }
+    else if( strcmp( mode_tmp, "check") == 0)
     {
         mode = 1;
     }
-    else if( strcmp(mode, "path") == 0)
+    else if( strcmp( mode_tmp, "path") == 0)
     {
         mode = 2;
     }
@@ -90,10 +94,10 @@ int main ( int argc, char **argv)
         fprintf( stderr, "%s: Błędny tryb programu.\n", argv[0]);
     }
 
-    if ( strcmp( filename, "") == 0) // sprawdzenie czy wpisano nazwę pliku do operowania, trochę chwilowe
+    if ( filename == NULL) // sprawdzenie czy wpisano nazwę pliku do zapisu/odczytu
     {
         filename = "graf.txt";
-    }
+    } 
 
     if ( dim_tmp != NULL) // określenie z argumentów wymiarów generowanego grafu
     {
@@ -102,7 +106,6 @@ int main ( int argc, char **argv)
         strncpy( tmp,dim_tmp, spacer);
         x_dim = atoi(tmp);
         strncpy( tmp2, dim_tmp+spacer+1, sizeof(dim_tmp) - spacer);
-        printf("%s\n ", tmp2 );
         y_dim = atoi(tmp2);
 
     }
