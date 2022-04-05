@@ -4,6 +4,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void create_graph(int x, int y, char *plik, double range_begin, double range_end);
+void create_graph(int x, int y, char *plik, double range_begin, double range_end, int amount);
 
 #endif

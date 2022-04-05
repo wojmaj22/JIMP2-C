@@ -13,10 +13,7 @@ char *instrukcja = "Instrukcja programu %s służącego do rysowania grafów: \n
 " -y <liczba całkowita> - wymiar poziomy grafu\n"
 "[-n <liczba całkowita> - podział grafu na ilość podgrafów\n";
 
-void check_graph( char *plik)
-{
-    printf("Sprawdzanie spójności grafu z pliku %s.\n", plik);
-}
+
 void calculate_path( char *plik, int x1, int x2, int y1, int y2)
 {
     printf("Obliczanie długości ścieżki pomiędzy węzłami: (%i,%i) oraz (%i,%i) w pliku %s.\n", x1, y1, x2, y2, plik);
@@ -28,10 +25,10 @@ int main ( int argc, char **argv)
     int opt; // do getopta
     char *mode_tmp = NULL, *filename = NULL, *dim_tmp = NULL;
     char *point1_tmp = NULL, *point2_tmp = NULL, *range_tmp = NULL;; // do wczytywania argumetów getoptem
-    char tmp[14], tmp2[7], tmp3[18], tmp4[9], tmp5[14], tmp6[14], tmp7[14], tmp8[14]; // stringi do przeksztąłcenia wczytywanych argumentów
+    char tmp[20], tmp2[10], tmp3[18], tmp4[9], tmp5[14], tmp6[14], tmp7[14], tmp8[14]; // stringi do przeksztąłcenia wczytywanych argumentów
     char *p = NULL; // jak wyżej
     int x_dim = 100, y_dim = 100;//domyślne wymiary grafu
-    int amount = 1; // domyślny podział grafu
+    int amount = 0; // domyślna ilość podzialeń grafu
     int x1=0,  y1=0; // współrzędne pierwszego punktu do liczenia odległości
     int x2=0, y2=0;  // współrzędne drugiego punktu do liczenia odległości
     double range_begin = 0, range_end = 10; // zakres wag krawędzi grafu
@@ -92,6 +89,7 @@ int main ( int argc, char **argv)
     else
     {
         fprintf( stderr, "%s: Błędny tryb programu.\n", argv[0]);
+        return 1;
     }
 
     if ( filename == NULL) // sprawdzenie czy wpisano nazwę pliku do zapisu/odczytu
@@ -105,12 +103,16 @@ int main ( int argc, char **argv)
         int spacer = p - dim_tmp;
         strncpy( tmp,dim_tmp, spacer);
         x_dim = atoi(tmp);
-        strncpy( tmp2, dim_tmp+spacer+1, sizeof(dim_tmp) - spacer);
+        strncpy( tmp2, dim_tmp+spacer+1, strlen(dim_tmp) - spacer);
         y_dim = atoi(tmp2);
-
+        if( x_dim * y_dim > 100000000 )
+        {
+            fprintf( stderr, "%s: Podano zbyt duże wymiary grafu. \n", argv[0]);
+            return 1;
+        }
     }
     
-    if ( range_tmp != NULL) // określenie zakresu wag krawędzi w generowanym grafie - to nie działa dla liczb niecałkowitych
+    if ( range_tmp != NULL) // określenie zakresu wag krawędzi w generowanym grafie
     {
         p = strchr( range_tmp, 45);
         int spacer = p - range_tmp;
@@ -118,6 +120,21 @@ int main ( int argc, char **argv)
         range_begin = atof(tmp3);
         strncpy( tmp4, range_tmp+spacer+1, strlen(range_tmp) - spacer);
         range_end = atof(tmp4);
+        if( range_begin > range_end )
+        {
+            fprintf( stderr, "%s: Źle wpisano zakres wag krawędzi grafu. \n", argv[0]);
+            return 1;
+        }
+        if( range_begin > 10000 )
+        {
+            fprintf( stderr, "%s: Zakres wag krawędzi wychodzi poza dopuszczony limit. \n", argv[0]);
+            return 1;
+        }
+        if( range_end > 10000 )
+        {
+            fprintf( stderr, "%s: Zakres wag krawędzi wychodzi poza dopuszczony limit. \n", argv[0]);
+            return 1;
+        }
     }
 
     if ( point1_tmp != NULL) // pierwszy punkt do pomiaru odległości
@@ -142,7 +159,7 @@ int main ( int argc, char **argv)
 
     if ( mode == 0)
     {
-        create_graph( x_dim, y_dim, filename, range_begin, range_end);
+        create_graph( x_dim, y_dim, filename, range_begin, range_end, amount);
     }
     else if( mode  == 1)
     {
