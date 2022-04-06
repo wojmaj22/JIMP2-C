@@ -25,7 +25,7 @@ int main ( int argc, char **argv)
     int opt; // do getopta
     char *mode_tmp = NULL, *filename = NULL, *dim_tmp = NULL;
     char *point1_tmp = NULL, *point2_tmp = NULL, *range_tmp = NULL;; // do wczytywania argumetów getoptem
-    char tmp[20], tmp2[10], tmp3[18], tmp4[9], tmp5[14], tmp6[14], tmp7[14], tmp8[14]; // stringi do przeksztąłcenia wczytywanych argumentów
+    char tmp[20], tmp2[10], tmp3[18], tmp4[9], tmp5[14], tmp6[14], tmp7[14]; // stringi do przekształcenia wczytywanych argumentów
     char *p = NULL; // jak wyżej
     int x_dim = 100, y_dim = 100;//domyślne wymiary grafu
     int amount = 0; // domyślna ilość podzialeń grafu
@@ -33,9 +33,10 @@ int main ( int argc, char **argv)
     int x2=0, y2=0;  // współrzędne drugiego punktu do liczenia odległości
     double range_begin = 0, range_end = 10; // zakres wag krawędzi grafu
     int mode = 0; // tryb programu: 0 - generate, 1 - check, 2 - path
+    int d_flag = 0; // więcej informacji do debugowania
 
     // wczytywanie argumentów getoptem
-    while ((opt = getopt (argc, argv, "m:f:s:n:r:a:b:h")) != -1) 
+    while ((opt = getopt (argc, argv, "m:f:s:n:r:a:b:hd")) != -1) 
     {
         switch (opt) 
         {
@@ -63,6 +64,9 @@ int main ( int argc, char **argv)
         case 'h':
             printf ( instrukcja, argv[0]);
             return 0;
+        case 'd':
+            d_flag = 1;
+            break;
         default:                   
             fprintf ( stderr, instrukcja, argv[0]);
             exit (EXIT_FAILURE);
@@ -73,28 +77,20 @@ int main ( int argc, char **argv)
     if ( mode_tmp == NULL)
     {
         mode = 0;
-    }
-    else if ( strcmp( mode_tmp, "generate") == 0)
-    {
+    } else if ( strcmp( mode_tmp, "generate") == 0) {
         mode = 0;
-    }
-    else if( strcmp( mode_tmp, "check") == 0)
-    {
+    } else if( strcmp( mode_tmp, "check") == 0) {
         mode = 1;
-    }
-    else if( strcmp( mode_tmp, "path") == 0)
-    {
+    } else if( strcmp( mode_tmp, "path") == 0) {
         mode = 2;
-    }
-    else
-    {
+    } else {
         fprintf( stderr, "%s: Błędny tryb programu.\n", argv[0]);
         return 1;
     }
 
     if ( filename == NULL) // sprawdzenie czy wpisano nazwę pliku do zapisu/odczytu
     {
-        filename = "graf.txt";
+        filename = "data/graf.txt";
     } 
 
     if ( dim_tmp != NULL) // określenie z argumentów wymiarów generowanego grafu
@@ -157,9 +153,19 @@ int main ( int argc, char **argv)
         y2 = atof(tmp7);
     }
 
+    if (d_flag == 1)
+    {
+        printf("Informacje dodatkowe: \n");
+        printf("Tryb: %i-%s \n", mode, mode_tmp);
+        printf("Wczytany zakres: %i x %i.\n", x_dim, y_dim);
+        printf("Plik do czytania/zapisu: %s \n", filename);
+        printf("Zakres generowania: %lf ; %lf \n", range_begin, range_end);
+        printf("Wybrane punkty: (%i,%i) oraz (%i,%i) \n", x1, y1, x2, y2);
+    }
+
     if ( mode == 0)
     {
-        create_graph( x_dim, y_dim, filename, range_begin, range_end, amount);
+        create_graph( x_dim, y_dim, filename, range_begin, range_end, amount, d_flag);
     }
     else if( mode  == 1)
     {
