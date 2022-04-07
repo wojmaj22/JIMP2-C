@@ -3,21 +3,18 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "../utilities/memwatch.h"
 
-typedef struct Vertex{
-    int vertex_number;
-    struct Vertice *next;
-} vertex;
+struct FIFO { // kolejka FIFO
+    int *vertices;
+    int front;
+    int end;
+};
 
-typedef struct Adjacency_list {
-    int vertex;
-    int adjacent_vertices[2];
-} adjacency_list;
+void add_to_queue( struct FIFO *queue, int vertex);
 
-int add_to_queue();
+int del_from_queue( struct FIFO *queue, int debug_flag);
 
-int del_from_queue();
-
-void check_graph( char *plik);
+void check_graph( char *plik, int debug_flag);
 
 #endif

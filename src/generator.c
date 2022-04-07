@@ -55,7 +55,7 @@ void cut_graph(int x, int y,double edges_tab_x[x-1][y], double edges_tab_y[x][y-
 			printf("Wybrany wierzchołek to: %i \n", w2);
 
 		int vertex = w1; // usuwanie krawędzi na drodze między wylosowanymi wierzchołkami
-		int tmp = 0;
+		int tmp = 0; // ruch w pionie lub poziomie
 		edges_tab_x[vertex % x][vertex / x] = -1;
 		edges_tab_y[vertex % x][vertex / x] = -1;
 		do

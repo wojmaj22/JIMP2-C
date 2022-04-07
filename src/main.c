@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include "../utilities/memwatch.h"
 
 #include "bfs.h"
 #include "djikstra.h"
 #include "generator.h"
+#include "czytacz.h"
 
 char *instrukcja = "Instrukcja programu %s służącego do rysowania grafów: \n" // do aktualizacji
 "Możliwe argumenty wywołania programu to:\n"
@@ -169,7 +171,7 @@ int main ( int argc, char **argv)
     }
     else if( mode  == 1)
     {
-        check_graph( filename);
+        check_graph( filename, d_flag);
     }
     else if( mode == 2)
     {
