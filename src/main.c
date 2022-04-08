@@ -9,11 +9,19 @@
 #include "generator.h"
 #include "czytacz.h"
 
-char *instrukcja = "Instrukcja programu %s służącego do rysowania grafów: \n" // do aktualizacji
-"Możliwe argumenty wywołania programu to:\n"
-" -x <liczba całkowita> - wymiar pionowy grafu\n"
-" -y <liczba całkowita> - wymiar poziomy grafu\n"
-"[-n <liczba całkowita> - podział grafu na ilość podgrafów\n";
+char *instrukcja = " Instrukcja programu %s służącego do rysowania grafów: \n" // ew. dodać coś do instrukcji
+" Możliwe argumenty wywołania programu to:\n"
+"Argumenty ogólne:\n"
+" -m <tryb> - wybór działania programu: \"generate\" - generowanie grafu, \"check\" - sprawdzenie spójności, \"path\" - obliczanie ścieżki \n"
+" -f <nazwa_pliku> - plik do zapisu/odczytu grafu\n"
+" -h wyświetlenie pomocy\n"
+"Argumenty dla trybu \"generate\":\n"
+" -s <szerokość x wysokość> - wymiary grafu\n"
+" -n <ilość_podziałów> - ile razy graf ma zostać podzielony\n"
+" -r <przedział> - przedział wag krawędzi generowanego grafu <początek-koniec>\n"
+"Argumenty dla trybu \"path\":"
+" -a <punkt> - pierwszy punkt do liczenia odległości format - <x;y>\n"
+" -b <punkt> - drugi punkt do liczenia odległości <x;y\n";
 
 
 void calculate_path( char *plik, int x1, int x2, int y1, int y2)
