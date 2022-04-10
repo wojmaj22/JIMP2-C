@@ -9,12 +9,15 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
-!.log
+*.log
 .vscode/!
 *.o
 *.exe
 *.out
 ../.vscode/*
+.vscode/
+memwatch.log
+
 
 # Local History for Visual Studio Code
 .history/
