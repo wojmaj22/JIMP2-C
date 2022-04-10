@@ -34,7 +34,7 @@ void check_graph( char *plik, int debug_flag)
     struct Graph *graph = createGraph( edges, wxk, l);
 
     struct FIFO queue;
-    int *visited = malloc ( wxk * sizeof (int));
+    short int *visited = malloc ( wxk * sizeof (int));
     for( int i = 0; i < wxk; i++)
     {
         visited[i] = 0;
@@ -80,8 +80,11 @@ void check_graph( char *plik, int debug_flag)
     }
     if ( test == 0)
         printf("Graf jest spójny.\n");
+        free(queue.vertices);
         free(visited);
         free(edges);
+        for( int i = 0; i < wxk; i++ )
+		    free( graph->head[i] );
         free(graph->head);
         free(graph);
 }

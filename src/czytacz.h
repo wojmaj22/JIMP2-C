@@ -2,6 +2,7 @@
 #define _CZYTACZ_H_
 
 #include "../utilities/memwatch.h"
+#include <stdio.h>
 
 struct node {
 	int dest;
@@ -27,5 +28,7 @@ struct edge *readfromfile( FILE *in );
 
 int getwxk();
 int getl();
+int getkolumny();
+int getwiersze();
 
 #endif

@@ -97,12 +97,11 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
     srand(time(NULL));
     int counter = 0;
    
-    if(amount == 0)
+    if(amount == 0) // wypisywanie bez dzielenia
     {
         fprintf( out, "%i %i\n", x, y);
         while ( counter < x*y)
         {
-            fprintf( out, "%i - ", counter);
             if( counter % x != x-1)
                 fprintf( out, "%i :%lf  ", counter + 1, range_begin + ((rand() / (double)RAND_MAX) * (range_end - range_begin)));
             if( counter < (x*y - x))
@@ -115,6 +114,7 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
         exit(0);
     }
 
+	//wypisywanie z dzieleniem grafu
     int wiersze_x = y, wiersze_y = y;
 	int kolumny_x = x, kolumny_y = x;
 
@@ -175,10 +175,9 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
 		}
 	}
 
-    fprintf( out, "%i %i\n", x, y);
+    fprintf( out, "%i %i\n", x, y); // wypisywanie podzielonego grafu
         while ( counter < x*y)
         {
-            fprintf( out, "%i - ", counter);
             if( counter % x != x-1)
                 if(tab_x[counter/x][counter%x] != -1)
                     fprintf( out, "%i :%lf  ", counter + 1, range_begin + ((rand() / (double)RAND_MAX) * (range_end - range_begin)));
@@ -188,7 +187,7 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
             fprintf(out, "\n");
             counter++;
         }
-    for ( int i = 0; i < wiersze_x; i++)
+    for ( int i = 0; i < wiersze_x; i++) // zwalnianie pamięci itd
 	{
 		free(tab_x[i]);
 	}

@@ -19,15 +19,9 @@ char *instrukcja = " Instrukcja programu %s służącego do rysowania grafów: \
 " -s <szerokość x wysokość> - wymiary grafu\n"
 " -n <ilość_podziałów> - ile razy graf ma zostać podzielony\n"
 " -r <przedział> - przedział wag krawędzi generowanego grafu <początek-koniec>\n"
-"Argumenty dla trybu \"path\":"
+"Argumenty dla trybu \"path\":\n"
 " -a <punkt> - pierwszy punkt do liczenia odległości format - <x;y>\n"
 " -b <punkt> - drugi punkt do liczenia odległości <x;y\n";
-
-
-void calculate_path( char *plik, int x1, int x2, int y1, int y2)
-{
-    printf("Obliczanie długości ścieżki pomiędzy węzłami: (%i,%i) oraz (%i,%i) w pliku %s.\n", x1, y1, x2, y2, plik);
-}
 
 int main ( int argc, char **argv)
 {

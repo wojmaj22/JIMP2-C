@@ -5,6 +5,16 @@
 
 int l;
 int wxk;
+int wiersze;
+int kolumny;
+
+int getwiersze(){
+	return wiersze;
+}
+
+int getkolumny(){
+	return kolumny;
+}
 
 int getwxk() {
 	return wxk;
@@ -51,6 +61,7 @@ struct Graph* createGraph(struct edge edges[], int wxk, int l)
 		}
 	}
 
+	
 	return graph;
 }
 
@@ -83,7 +94,6 @@ struct edge *readfromfile( FILE * in ) {
 
 	rewind(in); //ustawienie wskaźnika z powrotem na początek pliku
 
-	int wiersze, kolumny;//, wxk;
 	//czytanie pierwszej linijki pliku ( wymiary grafu ):
 	if( fscanf( in, "%d %d", &wiersze, &kolumny) != 2 ) {
 		fclose(in);
