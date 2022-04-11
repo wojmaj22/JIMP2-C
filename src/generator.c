@@ -6,6 +6,7 @@
 
 void cut_graph(int x, int y,short int **tab_x, short int **tab_y, int debug_flag)
 {
+		int tmp2;
 		int w1, w2;
  		int true = 0;
 		while (true == 0) // losowanie pierwszego wierzchołka
@@ -61,7 +62,7 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y, int debug_flag
 		{
 			tab_x[vertex / x][vertex % x] = -1;
 		    tab_y[vertex / x][vertex % x] = -1;
-			if (tmp % 2 == 0)
+			if (tmp % 3 == 0)
 			{
 				if (vertex % x > w2 % x)
 				{
@@ -72,7 +73,7 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y, int debug_flag
 					vertex++;
 				}
 			}
-			else if (tmp % 2 == 1)
+			else if (tmp % 3 == 1)
 			{
 				if ((vertex / x) > (w2 / x))
 				{
@@ -83,6 +84,28 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y, int debug_flag
 					vertex = vertex + x;
 				}
 			}
+			if(tmp % 3 == 2)
+			{
+				tmp2 = rand() % 4;
+				if( tmp2 == 0)
+				{
+					vertex++;
+				}
+				else if( tmp2 == 1)
+				{
+					vertex+=x;
+				}
+				else if( tmp2 == 2)
+				{
+					vertex--;
+				}
+				else
+				{
+					vertex-=x;
+				}
+			}
+			tab_x[vertex / x][vertex % x] = -1;
+			tab_y[vertex / x][vertex % x] = -1;
 			tmp++;
 		} while (vertex != w2);
 		tab_x[vertex / x][vertex % x] = -1;
