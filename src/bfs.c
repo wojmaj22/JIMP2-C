@@ -80,7 +80,7 @@ void check_graph( char *plik, int debug_flag)
     }
     if ( test == 0)
         printf("Graf jest spójny.\n");
-        free(queue.vertices);
+        free(queue.vertices); // czyszczenie pamięci
         free(visited);
         free(edges);
         for( int i = 0; i < wxk; i++ )

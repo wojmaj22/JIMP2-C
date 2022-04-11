@@ -27,7 +27,7 @@ int main ( int argc, char **argv)
 {
     //zmienne
     int opt; // do getopta
-    char *mode_tmp = NULL, *filename = NULL, *dim_tmp = NULL;
+    char *filename = NULL, *dim_tmp = NULL;
     char *point1_tmp = NULL, *point2_tmp = NULL, *range_tmp = NULL;; // do wczytywania argumetów getoptem
     char tmp[20], tmp2[10], tmp3[18], tmp4[9], tmp5[14], tmp6[14], tmp7[14]; // stringi do przekształcenia wczytywanych argumentów
     char *p = NULL; // jak wyżej
@@ -40,12 +40,18 @@ int main ( int argc, char **argv)
     int d_flag = 0; // więcej informacji do debugowania
 
     // wczytywanie argumentów getoptem
-    while ((opt = getopt (argc, argv, "m:f:s:n:r:a:b:hd")) != -1) 
+    while ((opt = getopt (argc, argv, "gcpf:s:n:r:a:b:hd")) != -1) 
     {
         switch (opt) 
         {
-        case 'm':
-            mode_tmp = optarg;
+        case 'g':
+            mode = 0;
+            break;
+        case 'c':
+            mode = 1;
+            break;
+        case 'p':
+            mode = 2;
             break;
         case 'f':
             filename = optarg;
@@ -78,20 +84,6 @@ int main ( int argc, char **argv)
     }
 
     // obróbka wczytanych argumetów i sprawdzenie ich
-    if ( mode_tmp == NULL)
-    {
-        mode = 0;
-    } else if ( strcmp( mode_tmp, "generate") == 0) {
-        mode = 0;
-    } else if( strcmp( mode_tmp, "check") == 0) {
-        mode = 1;
-    } else if( strcmp( mode_tmp, "path") == 0) {
-        mode = 2;
-    } else {
-        fprintf( stderr, "%s: Błędny tryb programu.\n", argv[0]);
-        return 1;
-    }
-
     if ( filename == NULL) // sprawdzenie czy wpisano nazwę pliku do zapisu/odczytu
     {
         filename = "data/graf.txt";
@@ -160,7 +152,7 @@ int main ( int argc, char **argv)
     if (d_flag == 1)
     {
         printf("Informacje dodatkowe: \n");
-        printf("Tryb: %i-%s \n", mode, mode_tmp);
+        printf("Tryb: %i \n", mode);
         printf("Wczytany zakres: %i x %i.\n", x_dim, y_dim);
         printf("Plik do czytania/zapisu: %s \n", filename);
         printf("Zakres generowania: %lf ; %lf \n", range_begin, range_end);
@@ -177,7 +169,7 @@ int main ( int argc, char **argv)
     }
     else if( mode == 2)
     {
-        calculate_path( filename, x1, x2, y1, y2);
+        calculate_path( filename, x1, x2, y1, y2, d_flag);
     }
 
 return 0;

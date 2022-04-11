@@ -1,21 +1,7 @@
 #include "djikstra.h"
 #include "czytacz.h"
 
-int size = 0;
-
-int cmpfunc (const void * a, const void * b) {
-   return ( *(int*)b - *(int*)a );
-}
-
-void print_array( double *array, int size)
-{
-	for(int i = 0; i < size; i++)
-	{
-		printf("%lf, \n", array[i]);
-	}
-}
-
-double get_lowest_ind( double *array, int size)
+double get_lowest_not_visited( double *array, short int *visited, int size) // poszukiwanie najbliższego nieodwiedzonego wierzchołka
 {
 	int i;
 	double lowest = __INT_MAX__;
@@ -24,14 +10,17 @@ double get_lowest_ind( double *array, int size)
 	{
 		if (array[i] < lowest)
 		{
-			lowest = array[i];
-			lowest_ind = i;
-		}
+            if(visited[i] == 0)
+            {
+			    lowest = array[i];
+			    lowest_ind = i;
+            }
+        }
 	}
-	return lowest_ind;
+return lowest_ind;
 }
 
-void calculate_path(char *filename, int x1, int x2, int y1, int y2)
+void calculate_path(char *filename, int x1, int x2, int y1, int y2, int debug_flag)
 {
     printf("Obliczanie drogi z punktu:(%i;%i) do (%i;%i) w pliku %s.\n", x1, y1, x2, y2, filename);
     FILE *in = fopen( filename, "r");
@@ -50,36 +39,39 @@ void calculate_path(char *filename, int x1, int x2, int y1, int y2)
 	int wiersze = getwiersze(), kolumny = getkolumny();
     int p1 =  x1 + wiersze * y1; //pierwszy punkt bez współrzędnych
     int p2 =  x2 + wiersze * y2; //drugi punkt bez współrzędnych
+    int size = 0;
 
-    double *droga = malloc( wxk * sizeof(double));
+    double *droga = malloc( wxk * sizeof(double)); // tablica odlgegłości do poszczególnych wierzchołków
+    short int *visited = malloc( wxk * sizeof(short int)); // tablica odwiedzonych wierzchołków
     for( int i = 0; i < wxk; i++)
     {
         if( i != p1)
-        	droga[i] = __INT_MAX__;
+        	droga[i] = __INT_MAX__; // wszystkie wierzchołki mają na początku nieskończoną odległość
         else
-			droga[i] = 0;
-		size++;
+			droga[p1] = 0; // pierwszy wierzchołek do szuakania ma odległość 0
+        visited[i] = 0; // żaden wierzchołek nieodwiedzony
+		size++; // ilość wierzchołków razem
     }
-	qsort( droga, wxk, sizeof(double), cmpfunc);
-	int counter = 0;
-    while(size != 0) // oblicza tylko drogę od 0, dodać kolejkę priorytetową
+    while(size != 0) // dopóki nie przeszuka wszystkich wierzchołków
     {
-        int u = counter;
-		printf("Element %i, wartość %lf\n", u, droga[u]);
-        struct node *tmp = graph->head[u];
-        while( tmp != NULL)
+        int vertex = get_lowest_not_visited( droga, visited, wxk); // wierzchołek z którego liczymy drogi do sąsiadujących wierzchołków - najbliższy od ostatniego i nieodwiedzony do tej pory
+        if( debug_flag == 1)
+		    printf("Element %i, wartość %lf\n", vertex, droga[vertex]); // do debugowania
+        struct node *tmp = graph->head[vertex]; // tymczasowy wierzchołek z którego szukamy odległości
+        while( tmp != NULL) // przeszukujemy wszystkich sąsiadów w tej pętli
         {
-            if( droga[tmp->dest] > droga[u] + tmp->weight)
+            if( droga[tmp->dest] > droga[vertex] + tmp->weight)
             {
-                droga[tmp->dest] = droga[u] + tmp->weight;
+                droga[tmp->dest] = droga[vertex] + tmp->weight;
             }
             tmp = tmp->next;
         }
-		size--;
-		counter++;
+        visited[vertex] = 1; // wierzchołek oznaczamy jako odwiedzony
+		size--; // zmiejszamy żeby pętla kiedyś się zakończyła 
     }
     printf("Droga do (%i;%i) wynosi %lf. \n", x2, y2, droga[p2]);
 
+    free(visited); // zwalnianie pamięci
     free(droga);
 	free(edges);
     for( int i = 0; i < wxk; i++ )
