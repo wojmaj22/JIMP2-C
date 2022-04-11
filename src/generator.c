@@ -117,6 +117,11 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
 
     printf("Tworzenie grafu o wymiarach %ix%i, dzielonego %i-razy, z wagami krawędzi w zakresie <%.2lf;%.2lf> i zapis do pliku %s.\n", x, y, amount, range_begin, range_end, plik);
     FILE *out = fopen( plik, "w");
+	if ( out == NULL)
+	{
+		fprintf(stderr, "Błąd, nie moge odczytać pliku lub nazwa pliku jest błędna.\n");
+        exit(2);
+    }
     srand(time(NULL));
     int counter = 0;
    

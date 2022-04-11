@@ -1,8 +1,10 @@
-main:
-	gcc src/main.c src/generator.c src/bfs.c src/djikstra.c src/czytacz.c -o program.exe
+CC=gcc
 
-debug:
-	gcc src/main.c src/generator.c src/bfs.c src/djikstra.c src/czytacz.c utilities/memwatch.c -DMEMWATCH -DMEMWATCH_STDIO -o program.exe -ggdb 
+main: src/main.o src/generator.o src/bfs.o src/djikstra.o src/czytacz.o
+	$(CC) src/main.o src/generator.o src/bfs.o src/djikstra.o src/czytacz.o -o program.exe
+
+debug: src/main.o src/generator.o src/bfs.o src/djikstra.o src/czytacz.o utilities/memwatch.o
+	$(CC) src/main.o src/generator.o src/bfs.o src/djikstra.o src/czytacz.o utilities/memwatch.o -DMEMWATCH -DMEMWATCH_STDIO -o program.exe -ggdb 
 
 clean:
-	rm -f program
+	rm -f program.exe src/main.o src/generator.o src/bfs.o src/djikstra.o src/czytacz.o

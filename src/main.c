@@ -9,7 +9,7 @@
 #include "generator.h"
 #include "czytacz.h"
 
-char *instrukcja = " Instrukcja programu %s służącego do rysowania grafów: \n" // ew. dodać coś do instrukcji
+char *instrukcja = " Instrukcja programu %s służącego do rysowania grafów: \n" // instrukcja programu
 " Możliwe argumenty wywołania programu to:\n"
 "Argumenty ogólne:\n"
 " -m <tryb> - wybór działania programu: \"generate\" - generowanie grafu, \"check\" - sprawdzenie spójności, \"path\" - obliczanie ścieżki \n"
@@ -112,20 +112,20 @@ int main ( int argc, char **argv)
         range_begin = atof(tmp3);
         strncpy( tmp4, range_tmp+spacer+1, strlen(range_tmp) - spacer);
         range_end = atof(tmp4);
-        if( range_begin > range_end )
+        if( range_begin > range_end ) // tutaj zmiana - wagi od 0 do 100 inaczej mogą nie działać przy dużych grafach( przepełnienie intów)
         {
             fprintf( stderr, "%s: Źle wpisano zakres wag krawędzi grafu. \n", argv[0]);
-            return 1;
+            return 5;
         }
-        if( range_begin > 10000 )
+        if( range_begin > 100 )
         {
             fprintf( stderr, "%s: Zakres wag krawędzi wychodzi poza dopuszczony limit. \n", argv[0]);
-            return 1;
+            return 5;
         }
-        if( range_end > 10000 )
+        if( range_end > 100 )
         {
             fprintf( stderr, "%s: Zakres wag krawędzi wychodzi poza dopuszczony limit. \n", argv[0]);
-            return 1;
+            return 5;
         }
     }
 

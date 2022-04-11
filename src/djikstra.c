@@ -26,8 +26,8 @@ void calculate_path(char *filename, int x1, int x2, int y1, int y2, int debug_fl
     FILE *in = fopen( filename, "r");
     if( in == NULL)
     {
-        fprintf(stderr, "Błąd, nie moge odczytać pliku lub plik jest błędny.\n");
-        exit(2); // dać odpowiedni kod błędu
+        fprintf(stderr, "Błąd, nie moge odczytać pliku lub nazwa pliku jest błędna.\n");
+        exit(2);
     }
     
     struct edge *edges = readfromfile(in);
@@ -40,6 +40,12 @@ void calculate_path(char *filename, int x1, int x2, int y1, int y2, int debug_fl
     int p1 =  x1 + wiersze * y1; //pierwszy punkt bez współrzędnych
     int p2 =  x2 + wiersze * y2; //drugi punkt bez współrzędnych
     int size = 0;
+
+    if( p1 < 0 || p1 > wxk || p2 < 0 || p2 > wxk)
+    {
+        fprintf( stderr, "Zły wierzchołek do pomiaru odległośći.\n");
+        exit(6);
+    }
 
     double *droga = malloc( wxk * sizeof(double)); // tablica odlgegłości do poszczególnych wierzchołków
     short int *visited = malloc( wxk * sizeof(short int)); // tablica odwiedzonych wierzchołków

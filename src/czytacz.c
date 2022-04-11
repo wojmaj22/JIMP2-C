@@ -97,8 +97,8 @@ struct edge *readfromfile( FILE * in ) {
 	//czytanie pierwszej linijki pliku ( wymiary grafu ):
 	if( fscanf( in, "%d %d", &wiersze, &kolumny) != 2 ) {
 		fclose(in);
-		printf("Zła pierwsza linijka!\n");
-		return NULL;
+		fprintf( stderr,"Zła pierwsza linijka!\n");
+		exit(4);
 	}
 	else {
 		wxk = wiersze*kolumny;

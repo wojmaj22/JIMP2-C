@@ -23,8 +23,8 @@ void check_graph( char *plik, int debug_flag)
     FILE *in = fopen( plik, "r");
     if( in == NULL)
     {
-        fprintf(stderr, "Błąd, nie moge odczytać pliku lub plik jest błędny.\n");
-        exit(2); // dać odpowiedni kod błędu
+        fprintf(stderr, "Błąd, nie moge odczytać pliku lub nazwa pliku jest błędna.\n");
+        exit(2);
     }
 
     struct edge *edges = readfromfile(in);
