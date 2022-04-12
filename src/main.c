@@ -4,10 +4,18 @@
 #include <getopt.h>
 #include "../utilities/memwatch.h"
 
+#ifdef DEBUG
+#define DEBUG 1
+#else
+#define DEBUG 0
+#endif
+
 #include "bfs.h"
 #include "djikstra.h"
 #include "generator.h"
 #include "czytacz.h"
+
+int debug_flag = DEBUG; // więcej informacji do debugowania
 
 char *instrukcja = " Instrukcja programu %s służącego do rysowania grafów: \n" // instrukcja programu
 " Możliwe argumenty wywołania programu to:\n"
@@ -37,10 +45,9 @@ int main ( int argc, char **argv)
     int x2=0, y2=0;  // współrzędne drugiego punktu do liczenia odległości
     double range_begin = 0, range_end = 10; // zakres wag krawędzi grafu
     int mode = 0; // tryb programu: 0 - generate, 1 - check, 2 - path
-    int d_flag = 0; // więcej informacji do debugowania
 
     // wczytywanie argumentów getoptem
-    while ((opt = getopt (argc, argv, "gcpf:s:n:r:a:b:hd")) != -1) 
+    while ((opt = getopt (argc, argv, "gcpf:s:n:r:a:b:h")) != -1) 
     {
         switch (opt) 
         {
@@ -74,9 +81,6 @@ int main ( int argc, char **argv)
         case 'h':
             printf ( instrukcja, argv[0]);
             return 0;
-        case 'd':
-            d_flag = 1;
-            break;
         default:                   
             fprintf ( stderr, instrukcja, argv[0]);
             exit (EXIT_FAILURE);
@@ -149,7 +153,7 @@ int main ( int argc, char **argv)
         y2 = atof(tmp7);
     }
 
-    if (d_flag == 1)
+    if (debug_flag == 1)
     {
         printf("Informacje dodatkowe: \n");
         printf("Tryb: %i \n", mode);
@@ -161,15 +165,15 @@ int main ( int argc, char **argv)
 
     if ( mode == 0)
     {
-        create_graph( x_dim, y_dim, filename, range_begin, range_end, amount, d_flag);
+        create_graph( x_dim, y_dim, filename, range_begin, range_end, amount);
     }
     else if( mode  == 1)
     {
-        check_graph( filename, d_flag);
+        check_graph( filename);
     }
     else if( mode == 2)
     {
-        calculate_path( filename, x1, x2, y1, y2, d_flag);
+        calculate_path( filename, x1, x2, y1, y2);
     }
 
 return 0;

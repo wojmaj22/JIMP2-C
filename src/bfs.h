@@ -13,8 +13,8 @@ struct FIFO { // kolejka FIFO
 
 void add_to_queue( struct FIFO *queue, int vertex);
 
-int del_from_queue( struct FIFO *queue, int debug_flag);
+int del_from_queue( struct FIFO *queue);
 
-void check_graph( char *plik, int debug_flag);
+void check_graph( char *plik);
 
 #endif

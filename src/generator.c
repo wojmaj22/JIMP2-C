@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
 #include "generator.h"
 
-void cut_graph(int x, int y,short int **tab_x, short int **tab_y, int debug_flag)
+extern int debug_flag;
+
+void cut_graph(int x, int y,short int **tab_x, short int **tab_y)
 {
 		int tmp2;
 		int w1, w2;
@@ -112,7 +113,7 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y, int debug_flag
 		tab_y[vertex / x][vertex % x] = -1;
 }
 
-void create_graph(int x, int y, char *plik, double range_begin, double range_end, int amount, int debug_flag)
+void create_graph(int x, int y, char *plik, double range_begin, double range_end, int amount)
 {
 
     printf("Tworzenie grafu o wymiarach %ix%i, dzielonego %i-razy, z wagami krawędzi w zakresie <%.2lf;%.2lf> i zapis do pliku %s.\n", x, y, amount, range_begin, range_end, plik);
@@ -168,7 +169,7 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
 
     for(int i = 0; i < amount; i++)
     {
-        cut_graph( x, y, tab_x, tab_y, debug_flag);
+        cut_graph( x, y, tab_x, tab_y);
     }
 
     if (debug_flag == 1) // Drukowanie do zobaczenia podziału grafu na stdout - funkcja do debugownaia głównie

@@ -5,6 +5,6 @@
 #include <stdio.h>
 #include "../utilities/memwatch.h"
 
-void create_graph(int x, int y, char *plik, double range_begin, double range_end, int amount, int debug_flag);
+void create_graph(int x, int y, char *plik, double range_begin, double range_end, int amount);
 
 #endif

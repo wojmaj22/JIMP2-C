@@ -1,13 +1,15 @@
 #include "bfs.h"
 #include "czytacz.h"
 
+extern int debug_flag;
+
 void add_to_queue( struct FIFO *queue, int vertex) // dodawanie do kolejki
 {
     queue->vertices[queue->front] = vertex;
     queue->front++;
 }
 
-int del_from_queue( struct FIFO *queue, int debug_flag) // usuwanie z kolejki
+int del_from_queue( struct FIFO *queue) // usuwanie z kolejki
 {
     if( debug_flag == 1)
         printf("Usunięto wierzchołek: %i \n", queue->vertices[queue->end]);
@@ -17,7 +19,7 @@ int del_from_queue( struct FIFO *queue, int debug_flag) // usuwanie z kolejki
 return tmp;
 }
 
-void check_graph( char *plik, int debug_flag)
+void check_graph( char *plik)
 {
     printf("Sprawdzanie spójności grafu z pliku %s.\n", plik);
     FILE *in = fopen( plik, "r");
@@ -49,7 +51,7 @@ void check_graph( char *plik, int debug_flag)
     visited[0] = 1;
     while( queue.front != queue.end)
     {
-        int current_vertex = del_from_queue( &queue, debug_flag);
+        int current_vertex = del_from_queue( &queue);
 
         struct node *tmp = graph->head[current_vertex];
         while( tmp != NULL)

@@ -59,9 +59,22 @@ struct Graph* createGraph(struct edge edges[], int wxk, int l)
 				;
 			newNode2->next = newNode;
 		}
+
+		struct node* newNode3 = malloc( sizeof *(newNode3) );
+                struct node* newNode4 = malloc( sizeof *(newNode4) );
+                newNode3->dest = src;
+                newNode3->weight = weight;
+
+                newNode3->next = NULL;
+                if( graph->head[dest] == NULL ) {
+                        graph->head[dest] = newNode3;
+                } else {
+                        for( newNode4 = graph->head[dest]; newNode4->next != NULL; newNode4 = newNode4->next )
+                                ;
+                        newNode4->next = newNode3;
+                }
 	}
 
-	
 	return graph;
 }
 
@@ -83,47 +96,223 @@ void printGraph( struct Graph* graph, int wxk ) {
 
 struct edge *readfromfile( FILE * in ) {
 	int c; 
-	//int 
 	l = 0;
-
-	//liczenie dwukropków w pliku, czyli krawędzi:
+	
 	while((c = fgetc(in)) != EOF) {
-		if( c == ':')
+		if( c == '\n')
 			l++;
 	}
 
-	rewind(in); //ustawienie wskaźnika z powrotem na początek pliku
+#ifdef DEBUG
+	fprintf(stderr, "Linii bedzie %d\n", l);
+#endif
 
-	//czytanie pierwszej linijki pliku ( wymiary grafu ):
+	rewind(in);
+
+	int wiersze, kolumny;
+
 	if( fscanf( in, "%d %d", &wiersze, &kolumny) != 2 ) {
 		fclose(in);
-		fprintf( stderr,"Zła pierwsza linijka!\n");
-		exit(4);
+		//printf("Zła pierwsza linijka!\n");
+		return NULL;
 	}
-	else {
-		wxk = wiersze*kolumny;
-		//printf("Bedzie %d wierzcholkow\n", wxk);
-	}
+	//rewind(in);
+	wxk = wiersze*kolumny;
+	//printf("Bedzie %d wierzcholkow\n", wxk);
 
 	//struct edge edges[l];
-	struct edge *edges = malloc( l * sizeof(*edges));
+	struct edge *edges = malloc( l * sizeof(*edges) );
 
 	char buf[1024];
 	
 	//czytanie pozostałych linii z pliku i zapisywanie do struktury edges
-	int i = -1, j = -1;
-	int tempd1, tempd2;
-	double tempw1, tempw2;
-	while( fgets( buf, 1024, in ) != NULL ) {
-		if( sscanf( buf, "%d :%lf %d :%lf", &tempd1, &tempw1, &tempd2, &tempw2) == 4) {
-					//&edges[i].dest, &edges[i].weight, &edges[i+1].dest, &edges[i+1].weight) == 4 ) {
-
-			//ten dlugi if to ogolnie sprawdzanie czy ta krawedz juz wczesniej nie wystapila w pliku
-			//( w sensie ze np 2->1 to powtorzenie polaczenia 1->2, ktore juz bylo )
-			//( jeszcze do dodania dla 3 i 4 polaczen )
-			//jesli sie nie powtarza to wrzuca polaczenie do edges, jesli sie powtarza to nie
+	int i = 0, j = -1;
+	int tempd1, tempd2, tempd3, tempd4;
+	double tempw1, tempw2, tempw3, tempw4;
+	while( fgets( buf, sizeof(buf), in ) != NULL ) {
+		if( buf[0] == '\n' ) {
+		        l--;
+			j++;	
+			continue;
+		} else if( sscanf( buf, "%d :%lf %d :%lf %d :%lf %d :%lf", &tempd1, &tempw1, &tempd2, &tempw2, &tempd3, &tempw3, &tempd4, &tempw4 ) == 8 ) {
+			if( tempd1 > j && tempd2 > j ) {
+				struct edge *newedges = realloc( edges, (l+1)*sizeof *newedges );
+                                edges = newedges;
+                                edges[i].src = j;
+                                edges[i+1].src = j;
+                                edges[i].dest = tempd1;
+                                edges[i].weight = tempw1;
+                                edges[i+1].dest = tempd2;
+                                edges[i+1].weight = tempw2;
+                                i+=2;
+                                j++;
+                                l++;
+			} else if( tempd1 > j && tempd3 > j ) {
+				struct edge *newedges = realloc( edges, (l+1)*sizeof *newedges );
+                                edges = newedges;
+                                edges[i].src = j;
+                                edges[i+1].src = j;
+                                edges[i].dest = tempd1;
+                                edges[i].weight = tempw1;
+                                edges[i+1].dest = tempd3;
+                                edges[i+1].weight = tempw3;
+                                i+=2;
+                                j++;
+                                l++;
+			} else if( tempd1 > j && tempd4 > j ) {
+				struct edge *newedges = realloc( edges, (l+1)*sizeof *newedges );
+                                edges = newedges;
+                                edges[i].src = j;
+                                edges[i+1].src = j;
+                                edges[i].dest = tempd1;
+                                edges[i].weight = tempw1;
+                                edges[i+1].dest = tempd4;
+                                edges[i+1].weight = tempw4;
+                                i+=2;
+                                j++;
+                                l++;
+			} else if( tempd2 > j && tempd3 > j ) {
+				struct edge *newedges = realloc( edges, (l+1)*sizeof *newedges );
+                                edges = newedges;
+                                edges[i].src = j;
+                                edges[i+1].src = j;
+                                edges[i].dest = tempd2;
+                                edges[i].weight = tempw2;
+                                edges[i+1].dest = tempd3;
+                                edges[i+1].weight = tempw3;
+                                i+=2;
+                                j++;
+                                l++;
+			} else if( tempd2 > j && tempd4 > j ) {
+				struct edge *newedges = realloc( edges, (l+1)*sizeof *newedges );
+                                edges = newedges;
+                                edges[i].src = j;
+                                edges[i+1].src = j;
+                                edges[i].dest = tempd2;
+                                edges[i].weight = tempw2;
+                                edges[i+1].dest = tempd4;
+                                edges[i+1].weight = tempw4;
+                                i+=2;
+                                j++;
+                                l++;
+			} else if( tempd3 > j && tempd4 > j ) {
+				struct edge *newedges = realloc( edges, (l+1)*sizeof *newedges );
+                                edges = newedges;
+                                edges[i].src = j;
+                                edges[i+1].src = j;
+                                edges[i].dest = tempd3;
+                                edges[i].weight = tempw3;
+                                edges[i+1].dest = tempd4;
+                                edges[i+1].weight = tempw4;
+                                i+=2;
+                                j++;
+                                l++;
+			} else if( tempd1 > j ) {
+				//struct edge *newedges = realloc( edges, (l-3)*sizeof *newedges );
+				//edges = newedges;
+				edges[i].src = j;
+				edges[i].dest = tempd1;
+				edges[i].weight = tempw1;
+				i++;
+				j++;
+				//l-=3;
+			} else if( tempd2 > j ) {
+                                //struct edge *newedges = realloc( edges, (l-3)*sizeof *newedges );
+                                //edges = newedges;
+                                edges[i].src = j;
+                                edges[i].dest = tempd2;
+                                edges[i].weight = tempw2;
+                                i++;
+                                j++;
+                                //l-=3;
+                        } else if( tempd3 > j ) {
+                                //struct edge *newedges = realloc( edges, (l-3)*sizeof *newedges );
+                                //edges = newedges;
+                                edges[i].src = j;
+                                edges[i].dest = tempd3;
+                                edges[i].weight = tempw3;
+                                i++;
+                                j++;
+                                //l-=3;
+                        }else if( tempd4 > j ) {
+                                //struct edge *newedges = realloc( edges, (l-3)*sizeof *newedges );
+                                //edges = newedges;
+                                edges[i].src = j;
+                                edges[i].dest = tempd4;
+                                edges[i].weight = tempw4;
+                                i++;
+                                j++;
+                                //l-=3;
+                        }
+		} else if( sscanf( buf, "%d :%lf %d :%lf %d :%lf", &tempd1, &tempw1, &tempd2, &tempw2, &tempd3, &tempw3) == 6) {
+			if( tempd1 > j && tempd2 > j ) {
+				struct edge *newedges = realloc( edges, (l+1) *sizeof *newedges );
+				edges = newedges;
+				edges[i].src = j;
+				edges[i+1].src = j;
+				edges[i].dest = tempd1;
+				edges[i].weight = tempw1;
+				edges[i+1].dest = tempd2;
+				edges[i+1].weight = tempw2;
+				i+=2;
+				j++;
+				l++;
+			} else if( tempd1 > j && tempd3 > j ) {
+                                struct edge *newedges = realloc( edges, (l+1)*sizeof *newedges );
+                                edges = newedges;
+                                edges[i].src = j;
+				edges[i+1].src = j;
+                                edges[i].dest = tempd1;
+                                edges[i].weight = tempw1;
+				edges[i+1].dest = tempd3;
+				edges[i+1].weight = tempw3;
+                                i+=2;
+                                j++;
+                                l++;
+                        } else if( tempd2 > j && tempd3 > j ) {
+                                struct edge *newedges = realloc( edges, (l+1)*sizeof *newedges );
+                                edges = newedges;
+                                edges[i].src = j;
+				edges[i+1].src = j;
+                                edges[i].dest = tempd2;
+                                edges[i].weight = tempw2;
+				edges[i+1].dest = tempd3;
+				edges[i+1].weight = tempw3;
+                                i+=2;
+                                j++;
+                                l++;
+                        } else if( tempd1 > j ) {
+                                //struct edge *newedges = realloc( edges, (l-2)*sizeof *newedges );
+                                //edges = newedges;
+                                edges[i].src = j;
+                                edges[i].dest = tempd1;
+                                edges[i].weight = tempw1;
+                                i++;
+                                j++;
+                                //l-=2;
+                        } else if( tempd2 > j ) {
+                                //struct edge *newedges = realloc( edges, (l-2)*sizeof *newedges );
+                                //edges = newedges;
+                                edges[i].src = j;
+                                edges[i].dest = tempd2;
+                                edges[i].weight = tempw2;
+                                i++;
+                                j++;
+                                //l-=2;
+                        } else if( tempd3 > j ) {
+                                edges[i].src = j;
+                                edges[i].dest = tempd3;
+                                edges[i].weight = tempw3;
+                                i++;
+                                j++;
+                        }	
+		} else if( sscanf( buf, "%d :%lf %d :%lf", &tempd1, &tempw1, &tempd2, &tempw2 ) == 4 ) {
+			//printf("2 polaczenia\n");
 			if( tempd1 > j ) {
-				if( tempd2 > j ) { //oba sie nie powtarzaja
+				if( tempd2 > j ) { 
+					struct edge *newedges = realloc( edges, (l+1)*sizeof *newedges );
+					edges = newedges;
+
 					edges[i].src = j;
 					edges[i+1].src = j;
 					edges[i].dest = tempd1;
@@ -132,54 +321,51 @@ struct edge *readfromfile( FILE * in ) {
 					edges[i+1].weight = tempw2;
 					i+=2;
 					j++;
-				} else { //czyli pierwszy jest ok, drugi nie
-					struct edge *newedges = realloc(edges, (l-1)*sizeof *newedges);
-					edges = newedges;
+					l++;
+				} else {
 					edges[i].src = j;
 					edges[i].dest = tempd1;
 					edges[i].weight = tempw1;
 					i++;
 					j++;
-					l--;
 				}
-			} else { //czyli tempd1 < j, czyli pierwszy jest zly
-				if( tempd2 > j ) { //drugi ok
-					struct edge *newedges = realloc(edges, (l-1)*sizeof *newedges);
-					edges=newedges;
+			} else { 
+				if( tempd2 > j ) {
 					edges[i].src = j;
 					edges[i].dest = tempd2;
 					edges[i].weight = tempw2;
 					i++;
 					j++;
-					l--;
-				} else { //oba nie ok
-					struct edge *newedges = realloc(edges, (l-2)*sizeof *newedges);
+				} else {
+					struct edge *newedges = realloc( edges, (l-1)*sizeof *newedges );
 					edges=newedges;
-					l-=2;
+					l--;
 					continue;
 				}
 			}
-		} else if( sscanf( buf, "%d :%lf", &tempd1, &tempw1) == 2 ) { 
-					//&edges[i].dest, &edges[i].weight ) == 2 ) {
-			if( tempd1 > j ) { //nie powtarza sie
+		}
+		else if( sscanf( buf, "%d :%lf", &tempd1, &tempw1 ) == 2 ) {
+			//printf("1 polaczenie\n");
+			if( tempd1 > j ) { 
 				edges[i].src = j;
 				edges[i].dest = tempd1;
 				edges[i].weight = tempw1;
 				i++;
 				j++;
-			} else { //powtarza sie
-				struct edge *newedges = realloc(edges, (l-1)*sizeof *newedges);
+			} else { 
+				struct edge *newedges = realloc( edges, (l-1)*sizeof *newedges );
                                 edges=newedges;
 				l--;
 				continue;
-			} 
-		} else {			//(do poprawy jeszcze)
-			i++;
-			j++;
+			}
+		}	
+		else {
+			//fprintf(stderr, "Niewłaściwy format pliku!\n");
+			return NULL;
 		}
-	}
+	}	
 		fclose(in);
-
+	//printf("l to %d\n", l);	
 	return edges;
 }
 /*	

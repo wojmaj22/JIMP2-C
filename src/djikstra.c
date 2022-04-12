@@ -1,6 +1,8 @@
 #include "djikstra.h"
 #include "czytacz.h"
 
+extern int debug_flag;
+
 double get_lowest_not_visited( double *array, short int *visited, int size) // poszukiwanie najbliższego nieodwiedzonego wierzchołka
 {
 	int i;
@@ -20,7 +22,7 @@ double get_lowest_not_visited( double *array, short int *visited, int size) // p
 return lowest_ind;
 }
 
-void calculate_path(char *filename, int x1, int x2, int y1, int y2, int debug_flag)
+void calculate_path(char *filename, int x1, int x2, int y1, int y2)
 {
     printf("Obliczanie drogi z punktu:(%i;%i) do (%i;%i) w pliku %s.\n", x1, y1, x2, y2, filename);
     FILE *in = fopen( filename, "r");
