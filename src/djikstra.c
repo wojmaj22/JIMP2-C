@@ -22,6 +22,24 @@ double get_lowest_not_visited( double *array, short int *visited, int size) // p
 return lowest_ind;
 }
 
+void free_memory( struct Graph *graph)
+{
+	int s = getwxk();
+	
+	for(int i = 0; i < s; i++)
+	{
+		struct node *current;
+		struct node *next;
+		current = graph->head[i];
+		while( current != NULL)
+		{	
+			next = current->next;
+			free(current);
+			current = next;
+		}
+	}
+}
+
 void calculate_path(char *filename, int x1, int x2, int y1, int y2)
 {
     printf("Obliczanie drogi z punktu:(%i;%i) do (%i;%i) w pliku %s.\n", x1, y1, x2, y2, filename);
@@ -56,7 +74,7 @@ void calculate_path(char *filename, int x1, int x2, int y1, int y2)
         if( i != p1)
         	droga[i] = __INT_MAX__; // wszystkie wierzchołki mają na początku nieskończoną odległość
         else
-			droga[p1] = 0; // pierwszy wierzchołek do szuakania ma odległość 0
+			droga[p1] = 0; // pierwszy wierzchołek do szuakania ma odległość 0
         visited[i] = 0; // żaden wierzchołek nieodwiedzony
 		size++; // ilość wierzchołków razem
     }
@@ -77,13 +95,11 @@ void calculate_path(char *filename, int x1, int x2, int y1, int y2)
         visited[vertex] = 1; // wierzchołek oznaczamy jako odwiedzony
 		size--; // zmiejszamy żeby pętla kiedyś się zakończyła 
     }
-    printf("Droga do (%i;%i) wynosi %lf. \n", x2, y2, droga[p2]);
+    printf("Droga do (%i;%i) - %i wynosi %lf. \n", x2, y2, p2, droga[p2]);
 
     free(visited); // zwalnianie pamięci
     free(droga);
-	free(edges);
-    for( int i = 0; i < wxk; i++ )
-		free( graph->head[i] );
+    free_memory( graph);
     free(graph->head);
     free(graph);
 }

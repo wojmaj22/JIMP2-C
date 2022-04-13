@@ -13,3 +13,4 @@ data/
 data/*
 data/*.txt
 .gitignore
+src/heap.c

@@ -1,5 +1,6 @@
 #include "bfs.h"
 #include "czytacz.h"
+#include "djikstra.h"
 
 extern int debug_flag;
 
@@ -82,11 +83,9 @@ void check_graph( char *plik)
     }
     if ( test == 0)
         printf("Graf jest spójny.\n");
-        free(queue.vertices); // czyszczenie pamięci
-        free(visited);
-        free(edges);
-        for( int i = 0; i < wxk; i++ )
-		    free( graph->head[i] );
-        free(graph->head);
-        free(graph);
+    free(queue.vertices); // czyszczenie pamięci
+    free(visited);
+    free_memory( graph);
+	free( graph->head);
+	free( graph);
 }

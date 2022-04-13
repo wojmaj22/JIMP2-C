@@ -26,9 +26,6 @@ int getl() {
 
 struct Graph* createGraph(struct edge edges[], int wxk, int l)
 {
-
-	// allocate memory for the graph data structure
-	//struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
 	struct Graph* graph = malloc(sizeof *graph);
 	graph->head = malloc( l * sizeof *(graph->head) );
 
@@ -46,8 +43,8 @@ struct Graph* createGraph(struct edge edges[], int wxk, int l)
 		double weight = edges[i].weight;
 
 		// allocate new node of adjacency list from `src` to `dest`
-		struct node* newNode = malloc(sizeof *(newNode) );
-		struct node* newNode2 = malloc( sizeof *(newNode2));
+		struct node* newNode = malloc( sizeof *(newNode) );
+		struct node* newNode2;
 		newNode->dest = dest;
 		newNode->weight = weight;
 
@@ -59,9 +56,9 @@ struct Graph* createGraph(struct edge edges[], int wxk, int l)
 				;
 			newNode2->next = newNode;
 		}
-
+		
 		struct node* newNode3 = malloc( sizeof *(newNode3) );
-                struct node* newNode4 = malloc( sizeof *(newNode4) );
+                struct node* newNode4;
                 newNode3->dest = src;
                 newNode3->weight = weight;
 
@@ -73,7 +70,12 @@ struct Graph* createGraph(struct edge edges[], int wxk, int l)
                                 ;
                         newNode4->next = newNode3;
                 }
+
+		//free(newNode);
+		//free(newNode3);
+
 	}
+	free(edges);
 
 	return graph;
 }
@@ -108,8 +110,6 @@ struct edge *readfromfile( FILE * in ) {
 #endif
 
 	rewind(in);
-
-	int wiersze, kolumny;
 
 	if( fscanf( in, "%d %d", &wiersze, &kolumny) != 2 ) {
 		fclose(in);
