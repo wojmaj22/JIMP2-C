@@ -63,7 +63,7 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y) // funckja do 
 		{
 			tab_x[vertex / x][vertex % x] = -1;
 		    tab_y[vertex / x][vertex % x] = -1;
-			if (tmp % 3 == 0)
+			if (tmp % 2 == 0)
 			{
 				if (vertex % x > w2 % x)
 				{
@@ -74,7 +74,7 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y) // funckja do 
 					vertex++;
 				}
 			}
-			else if (tmp % 3 == 1)
+			else if (tmp % 2 == 1)
 			{
 				if ((vertex / x) > (w2 / x))
 				{
@@ -83,38 +83,6 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y) // funckja do 
 				else if ((vertex / x) < (w2 / x))
 				{
 					vertex = vertex + x;
-				}
-			}
-			if(tmp % 5 == 2)
-			{
-				tmp2 = rand() % 4;
-				if( tmp2 == 0)
-				{
-					vertex++;
-					tab_x[vertex / x][vertex % x] = -1;
-					tab_y[vertex / x][vertex % x] = -1;
-					vertex++;
-				}
-				else if( tmp2 == 1)
-				{
-					vertex+=x;
-					tab_x[vertex / x][vertex % x] = -1;
-					tab_y[vertex / x][vertex % x] = -1;
-					vertex+=x;
-				}
-				else if( tmp2 == 2)
-				{
-					vertex--;
-					tab_x[vertex / x][vertex % x] = -1;
-					tab_y[vertex / x][vertex % x] = -1;
-					vertex--;
-				}
-				else
-				{
-					vertex-=x;
-					tab_x[vertex / x][vertex % x] = -1;
-					tab_y[vertex / x][vertex % x] = -1;
-					vertex-=x;
 				}
 			}
 			tab_x[vertex / x][vertex % x] = -1;
@@ -136,7 +104,7 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
         exit(2);
     }
     srand(time(NULL));
-    int counter = 0;
+    int counter = 0; // licznik wierzchołków
    
     if(amount == 0) // wypisywanie bez dzielenia
     {
@@ -183,7 +151,6 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
     {
         cut_graph( x, y, tab_x, tab_y);
     }
-
     if (debug_flag == 1) // Drukowanie do zobaczenia podziału grafu na stdout - funkcja do debugownaia głównie
 	{
 		int tmp2 = 0;

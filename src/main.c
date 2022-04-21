@@ -1,3 +1,5 @@
+//Wojciech Majchrzak, Dawid Stereńczak
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -165,7 +167,7 @@ int main ( int argc, char **argv)
         printf("Wybrane punkty: (%i,%i) oraz (%i,%i) \n", x1, y1, x2, y2);
     }
 
-    //wybór trybu pracy programu
+    //wybór trybu pracy programu    
     if ( mode == 0)
     {
         create_graph( x_dim, y_dim, filename, range_begin, range_end, amount);
