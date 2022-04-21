@@ -7,7 +7,7 @@
 
 struct FIFO { // kolejka FIFO
     int *vertices;
-    int front;
+    int  front;
     int end;
 };
 

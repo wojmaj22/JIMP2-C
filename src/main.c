@@ -14,6 +14,7 @@
 #include "djikstra.h"
 #include "generator.h"
 #include "czytacz.h"
+#include "heap.h"
 
 int debug_flag = DEBUG; // więcej informacji do debugowania
 
@@ -153,6 +154,7 @@ int main ( int argc, char **argv)
         y2 = atof(tmp7);
     }
 
+    //dodatkowe informacje o wczytanych argumentach w programie
     if (debug_flag == 1)
     {
         printf("Informacje dodatkowe: \n");
@@ -163,6 +165,7 @@ int main ( int argc, char **argv)
         printf("Wybrane punkty: (%i,%i) oraz (%i,%i) \n", x1, y1, x2, y2);
     }
 
+    //wybór trybu pracy programu
     if ( mode == 0)
     {
         create_graph( x_dim, y_dim, filename, range_begin, range_end, amount);

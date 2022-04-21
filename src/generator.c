@@ -5,12 +5,12 @@
 
 extern int debug_flag;
 
-void cut_graph(int x, int y,short int **tab_x, short int **tab_y)
+void cut_graph(int x, int y,short int **tab_x, short int **tab_y) // funckja do cięcia grafów na pół
 {
 		int tmp2;
 		int w1, w2;
  		int true = 0;
-		while (true == 0) // losowanie pierwszego wierzchołka
+		while (true == 0) // losowanie pierwszego wierzchołka na brzegu
 		{
 			w1 = rand() / (double)RAND_MAX * x * y;
 			if (w1 < x || w1 >= (x * y - x) || w1 % x == 0 || w1 % x == x - 1)
@@ -59,7 +59,7 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y)
 		int tmp = 0; // ruch w pionie lub poziomie
 		tab_x[vertex / x][vertex % x] = -1;
 		tab_y[vertex / x][vertex % x] = -1;
-		do
+		do // podróżujemy między wyznaczonymi wierzchołkami
 		{
 			tab_x[vertex / x][vertex % x] = -1;
 		    tab_y[vertex / x][vertex % x] = -1;
@@ -85,23 +85,35 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y)
 					vertex = vertex + x;
 				}
 			}
-			if(tmp % 3 == 2)
+			if(tmp % 5 == 2)
 			{
 				tmp2 = rand() % 4;
 				if( tmp2 == 0)
 				{
 					vertex++;
+					tab_x[vertex / x][vertex % x] = -1;
+					tab_y[vertex / x][vertex % x] = -1;
+					vertex++;
 				}
 				else if( tmp2 == 1)
 				{
+					vertex+=x;
+					tab_x[vertex / x][vertex % x] = -1;
+					tab_y[vertex / x][vertex % x] = -1;
 					vertex+=x;
 				}
 				else if( tmp2 == 2)
 				{
 					vertex--;
+					tab_x[vertex / x][vertex % x] = -1;
+					tab_y[vertex / x][vertex % x] = -1;
+					vertex--;
 				}
 				else
 				{
+					vertex-=x;
+					tab_x[vertex / x][vertex % x] = -1;
+					tab_y[vertex / x][vertex % x] = -1;
 					vertex-=x;
 				}
 			}
@@ -113,7 +125,7 @@ void cut_graph(int x, int y,short int **tab_x, short int **tab_y)
 		tab_y[vertex / x][vertex % x] = -1;
 }
 
-void create_graph(int x, int y, char *plik, double range_begin, double range_end, int amount)
+void create_graph(int x, int y, char *plik, double range_begin, double range_end, int amount) // generowanie grafu
 {
 
     printf("Tworzenie grafu o wymiarach %ix%i, dzielonego %i-razy, z wagami krawędzi w zakresie <%.2lf;%.2lf> i zapis do pliku %s.\n", x, y, amount, range_begin, range_end, plik);
@@ -147,7 +159,7 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
     int wiersze_x = y, wiersze_y = y;
 	int kolumny_x = x, kolumny_y = x;
 
-    short int **tab_x = malloc ( wiersze_x * sizeof(short int*));
+    short int **tab_x = malloc ( wiersze_x * sizeof(short int*)); // pamięć na krawędzie poziome
 	for( int i = 0; i < wiersze_x; i++)
 	{
 		tab_x[i] = malloc( kolumny_x * sizeof(short int));
@@ -157,7 +169,7 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
         }
 	}
 
-    short int **tab_y = malloc ( wiersze_y * sizeof(short int*));
+    short int **tab_y = malloc ( wiersze_y * sizeof(short int*)); // pamięć na krawędzie pionowe
 	for( int i = 0; i < wiersze_y; i++)
 	{
 		tab_y[i] = malloc( kolumny_y * sizeof(short int));
@@ -167,7 +179,7 @@ void create_graph(int x, int y, char *plik, double range_begin, double range_end
         }
 	}
 
-    for(int i = 0; i < amount; i++)
+    for(int i = 0; i < amount; i++) // cięcie określoną ilość razu
     {
         cut_graph( x, y, tab_x, tab_y);
     }

@@ -20,7 +20,7 @@ int del_from_queue( struct FIFO *queue) // usuwanie z kolejki
 return tmp;
 }
 
-void check_graph( char *plik)
+void check_graph( char *plik) // Algorytm BFS
 {
     printf("Sprawdzanie spójności grafu z pliku %s.\n", plik);
     FILE *in = fopen( plik, "r");
@@ -36,7 +36,7 @@ void check_graph( char *plik)
     int wxk = getwxk();
     struct Graph *graph = createGraph( edges, wxk, l);
 
-    struct FIFO queue;
+    struct FIFO queue; // kolejka FIFO
     short int *visited = malloc ( wxk * sizeof (int));
     for( int i = 0; i < wxk; i++)
     {
@@ -46,11 +46,11 @@ void check_graph( char *plik)
     queue.front = 0;
     queue.end = 0;
     
-    add_to_queue( &queue, 0);
+    add_to_queue( &queue, 0); // dodanie zerowego wierzchołka do kolejki
     if( debug_flag == 1)
         printf("Dodano wierzchołek 0 do kolejki.\n");
     visited[0] = 1;
-    while( queue.front != queue.end)
+    while( queue.front != queue.end) // sprawdzanie kolejnych wierzchołków
     {
         int current_vertex = del_from_queue( &queue);
 
@@ -70,6 +70,11 @@ void check_graph( char *plik)
         }
     }
     int test = 0;
+    if( queue.front == getwxk())
+        printf("Graf jest spójny.\n");
+    else
+        printf("Graf nie jest spójny.\n");
+    /*
     for( int i = 0; i < wxk; i++)
     {
         if( visited[i] == 0)
@@ -83,6 +88,7 @@ void check_graph( char *plik)
     }
     if ( test == 0)
         printf("Graf jest spójny.\n");
+    */
     free(queue.vertices); // czyszczenie pamięci
     free(visited);
     free_memory( graph);
