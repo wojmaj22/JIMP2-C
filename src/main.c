@@ -16,7 +16,6 @@
 #include "djikstra.h"
 #include "generator.h"
 #include "czytacz.h"
-#include "heap.h"
 
 int debug_flag = DEBUG; // więcej informacji do debugowania
 

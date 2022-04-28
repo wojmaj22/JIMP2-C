@@ -95,7 +95,7 @@ void calculate_path(char *filename, int x1, int x2, int y1, int y2)
         visited[vertex] = 1; // wierzchołek oznaczamy jako odwiedzony
 		size--; // zmiejszamy żeby pętla kiedyś się zakończyła 
     }
-    printf("Droga do (%i;%i) wynosi %lf. \n", x2, y2, p2, droga[p2]);
+    printf("Droga do (%i;%i) wynosi %lf. \n", x2, y2, droga[p2]);
 
     free(visited); // zwalnianie pamięci
     free(droga);
